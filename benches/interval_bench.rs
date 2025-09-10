@@ -1,4 +1,4 @@
-use criterion::{black_box, criterion_group, criterion_main, Criterion, BenchmarkId};
+use criterion::{black_box, criterion_group, criterion_main, BenchmarkId, Criterion};
 use rand::Rng;
 use std::cmp;
 
@@ -39,7 +39,10 @@ impl IntervalTree {
         self.root = Self::insert_node(self.root.take(), interval);
     }
 
-    fn insert_node(node: Option<Box<IntervalTreeNode>>, interval: Interval) -> Option<Box<IntervalTreeNode>> {
+    fn insert_node(
+        node: Option<Box<IntervalTreeNode>>,
+        interval: Interval,
+    ) -> Option<Box<IntervalTreeNode>> {
         match node {
             None => Some(Box::new(IntervalTreeNode::new(interval))),
             Some(mut n) => {
@@ -82,7 +85,7 @@ impl IntervalTree {
 fn generate_random_intervals(count: usize, max_value: i32) -> Vec<Interval> {
     let mut rng = rand::thread_rng();
     let mut intervals = Vec::with_capacity(count);
-    
+
     for _ in 0..count {
         let start = rng.gen_range(0..max_value);
         let length = rng.gen_range(1..=1000);
@@ -91,24 +94,24 @@ fn generate_random_intervals(count: usize, max_value: i32) -> Vec<Interval> {
             end: start + length,
         });
     }
-    
+
     intervals
 }
 
 fn generate_random_points(count: usize, max_value: i32) -> Vec<i32> {
     let mut rng = rand::thread_rng();
     let mut points = Vec::with_capacity(count);
-    
+
     for _ in 0..count {
         points.push(rng.gen_range(0..max_value));
     }
-    
+
     points
 }
 
 fn bench_build_tree(c: &mut Criterion) {
     let intervals = generate_random_intervals(1000, 100000);
-    
+
     c.bench_function("build_interval_tree", |b| {
         b.iter(|| {
             let mut tree = IntervalTree::new();
@@ -126,9 +129,9 @@ fn bench_query_points(c: &mut Criterion) {
     for interval in &intervals {
         tree.insert(*interval);
     }
-    
+
     let mut group = c.benchmark_group("query_points");
-    
+
     for size in [100, 1000, 10000].iter() {
         let points = generate_random_points(*size, 100000);
         group.bench_with_input(BenchmarkId::from_parameter(size), size, |b, _| {
@@ -151,10 +154,10 @@ fn bench_single_query(c: &mut Criterion) {
     for interval in &intervals {
         tree.insert(*interval);
     }
-    
+
     let points = generate_random_points(10000, 100000);
     let mut point_iter = points.iter().cycle();
-    
+
     c.bench_function("single_point_query", |b| {
         b.iter(|| {
             let point = *point_iter.next().unwrap();
@@ -163,5 +166,10 @@ fn bench_single_query(c: &mut Criterion) {
     });
 }
 
-criterion_group!(benches, bench_build_tree, bench_query_points, bench_single_query);
+criterion_group!(
+    benches,
+    bench_build_tree,
+    bench_query_points,
+    bench_single_query
+);
 criterion_main!(benches);
