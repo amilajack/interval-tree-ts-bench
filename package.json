@@ -1,0 +1,12 @@
+{
+  "name": "interval-tree-benchmark",
+  "version": "1.0.0",
+  "scripts": {
+    "ts-benchmark": "tsx interval-tree-benchmark.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0"
+  }
+}
