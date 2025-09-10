@@ -5,7 +5,9 @@
     "ts-benchmark": "tsx interval-tree-benchmark.ts"
   },
   "devDependencies": {
+    "@types/benchmark": "^2.1.5",
     "@types/node": "^20.0.0",
+    "benchmark": "^2.1.4",
     "tsx": "^4.0.0",
     "typescript": "^5.0.0"
   }

@@ -6,6 +6,13 @@ edition = "2021"
 [dependencies]
 rand = "0.8"
 
+[dev-dependencies]
+criterion = "0.5"
+
 [[bin]]
 name = "interval_benchmark"
 path = "src/main.rs"
+
+[[bench]]
+name = "interval_bench"
+harness = false
